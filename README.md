@@ -56,3 +56,7 @@
 5. Instrucciones de Ejecución
 - Comando de instalacion de librerias: `pip install peewee psycopg2-binary pymysql'
 - Comando para ejecutar la aplicacion: `python app.py'
+
+##
+DIAGRAMA
+- Imagen o exportable del Diagrama Entidad-Relación guardado en `docs/der.png`.
