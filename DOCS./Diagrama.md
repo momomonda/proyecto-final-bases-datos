@@ -39,3 +39,9 @@ erDiagram
     ORDEN_SERVICIO ||--o{ DETALLE_ORDEN_AJUSTE : "contiene"
     TIPO_AJUSTE ||--o{ DETALLE_ORDEN_AJUSTE : "aplica_en"
     ORDEN_SERVICIO ||--o{ MANO_OBRA : "registra"
+
+    ![alt text](image.png)
+    ![alt text](image-1.png)
+    ![alt text](image-2.png)
+    ![alt text](image-3.png)
+    ![alt text](image-4.png)
