@@ -5,7 +5,7 @@
    
 - Daniel Felipe Montero Sáenz 1 (1080181337 / danielfelipemonterosaenz@gmail.com)
 - Samuel Tuberquia David 2 (1013461129 / samueltuberquiad@gmail.com)
-- Chelssea Faria Moreno 3 (Documento / Correo)
+- Chelssea Faria Moreno 3 (1077711347 / cfariamoreno@gmail.com)
 
   
 ##
