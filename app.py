@@ -4,10 +4,22 @@ from peewee import *
 # CONFIGURACION DE CONEXION
 # ==================================================
 
-MOTOR_ACTIVO = "sqlite"
+# Cambia este valor para alternar entre motores
+MOTOR_ACTIVO = "postgres_neon" 
 
 if MOTOR_ACTIVO == "sqlite":
     db = SqliteDatabase("taller.db")
+
+elif MOTOR_ACTIVO == "postgres_neon":
+    
+    db = PostgresqlDatabase(
+        'neondb', # Nombre de la base de datos (por defecto suele ser neondb)
+        user='tu_usuario', # Tu rol/usuario en Neon
+        password='tu_contraseña', # Tu contraseña de Neon
+        host='ep-nombre-del-host-123456.us-east-2.aws.neon.tech', # El Endpoint que te da Neon
+        port=5432,
+        sslmode='require' # Requisito indispensable para conexiones a Neon.tech
+    )
 
 
 # ==================================================
@@ -24,48 +36,33 @@ class BaseModel(Model):
 # ==================================================
 
 class Cliente(BaseModel):
-
     nombre = CharField()
-
     telefono = CharField(null=True)
-
     correo = CharField(null=True)
-
     direccion = CharField(null=True)
 
-
 class TipoAjuste(BaseModel):
-
     nombre_servicio = CharField()
-
     descripcion = TextField(null=True)
-
     costo_base = FloatField()
 
-
 class OrdenServicio(BaseModel):
-
     cliente = ForeignKeyField(
         Cliente,
         backref="ordenes",
         on_delete="CASCADE"
     )
-
     fecha_cita = DateTimeField()
-
     estado = CharField(
         default="pendiente"
     )
 
-
 class DetalleOrdenAjuste(BaseModel):
-
     orden = ForeignKeyField(
         OrdenServicio,
         backref="detalles",
         on_delete="CASCADE"
     )
-
     ajuste = ForeignKeyField(
         TipoAjuste,
         backref="ordenes",
@@ -80,19 +77,14 @@ class DetalleOrdenAjuste(BaseModel):
             ),
         )
 
-
 class ManoObra(BaseModel):
-
     orden = ForeignKeyField(
         OrdenServicio,
         backref="mano_obra",
         on_delete="CASCADE"
     )
-
     descripcion_labor = TextField()
-
     tiempo_invertido_horas = FloatField()
-
     costo_operario = FloatField()
 
 
@@ -124,30 +116,21 @@ def ejecutar_pruebas():
         correo="juan@email.com",
         direccion="Medellin"
     )
-
-    print(
-        f"[CREATE] Cliente creado ID: {cliente.id}"
-    )
+    print(f"[CREATE] Cliente creado ID: {cliente.id}")
 
     ajuste = TipoAjuste.create(
         nombre_servicio="Cambio de pantalla",
         descripcion="Pantalla dañada",
         costo_base=150000
     )
-
-    print(
-        f"[CREATE] Ajuste creado ID: {ajuste.id}"
-    )
+    print(f"[CREATE] Ajuste creado ID: {ajuste.id}")
 
     orden = OrdenServicio.create(
         cliente=cliente,
         fecha_cita="2025-09-15 10:00:00",
         estado="pendiente"
     )
-
-    print(
-        f"[CREATE] Orden creada ID: {orden.id}"
-    )
+    print(f"[CREATE] Orden creada ID: {orden.id}")
 
     DetalleOrdenAjuste.create(
         orden=orden,
@@ -168,30 +151,17 @@ def ejecutar_pruebas():
     print("\n=== CONSULTA ===\n")
 
     for o in OrdenServicio.select():
-
-        print(
-            f"Orden {o.id}"
-        )
-
-        print(
-            f"Cliente: {o.cliente.nombre}"
-        )
-
-        print(
-            f"Estado: {o.estado}"
-        )
+        print(f"Orden {o.id}")
+        print(f"Cliente: {o.cliente.nombre}")
+        print(f"Estado: {o.estado}")
 
     # ----------------------------------
     # UPDATE
     # ----------------------------------
 
     orden.estado = "en_proceso"
-
     orden.save()
-
-    print(
-        f"\n[UPDATE] Nuevo estado: {orden.estado}"
-    )
+    print(f"\n[UPDATE] Nuevo estado: {orden.estado}")
 
     # ----------------------------------
     # DELETE
@@ -200,18 +170,11 @@ def ejecutar_pruebas():
     mano = ManoObra.get(
         ManoObra.orden == orden
     )
-
     mano.delete_instance()
-
-    print(
-        "[DELETE] Registro de mano de obra eliminado"
-    )
+    print("[DELETE] Registro de mano de obra eliminado")
 
     db.close()
-
-    print(
-        "\nConexion cerrada correctamente."
-    )
+    print("\nConexion cerrada correctamente.")
 
 
 if __name__ == "__main__":
